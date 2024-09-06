@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancer Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Cancer Detection</h1>
+        <form id="cancerForm">
+            <label for="input_data">Enter the features to detect the type of cancer:</label>
+            <input type="text" id="input_data" name="input_data" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="result" style="display: none;">
+            <h2>Predicted Cancer Type: <span id="predictedCancer"></span></h2>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#cancerForm').submit(function(event) {
+                event.preventDefault();
+                var form_data = $(this).serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: '/predict',
+                    data: form_data,
+                    success: function(response) {
+                        $('#predictedCancer').text(response);
+                        $('#result').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
